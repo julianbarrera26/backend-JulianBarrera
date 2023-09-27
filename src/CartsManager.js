@@ -1,0 +1,96 @@
+import fs from 'fs';
+import { manager } from './productmanager';
+
+class CartManager { 
+    constructor(path) {
+        if (fs.existsSync(path)) {
+            this.path = path;
+        } else {
+            console.log(`El archivo ${path} no existe.`);
+        }
+    }
+   
+    async getCarts() {
+        try {
+        
+            if (fs.existsSync(this.path)){
+                const cartsFile= await fs.promises.readFile(this.path, 'utf-8');
+                const cartData = JSON.parse(cartsFile);
+                return  cartData;
+
+            }else {
+                return []
+            }
+        }
+        catch (error) {
+            return error
+        }
+    }
+
+    //validateCode(code){
+     //   return this.Cart.find(Cart => Cart.code === code )
+    //}
+    async addProductToCart (idCart,idProduct){
+        const cart = await this.getCartById (idCart)
+        if (!cart){
+            throw new Error ('there is no cart qith this id')
+        }
+        const product = await manager.getProductById (idProduct) 
+        if (!product) {
+            throw new Error ('there is no cart qith this id')
+        }
+        const productIndex = cart.products.findIdex(p=>p.id === idProduct)
+        if (productIndex === -1) {
+            const newProduct = {id:idProduct,quantify:1}
+            cart.products.push(newProduct);
+        } else{
+            cart.products[productIndex].quantify++;
+        }
+    }
+
+
+
+    async getCartById(id) {
+        try {
+            
+            const carts = await this.getCarts()
+
+            
+            const cartSearched = carts.find((p) => p.id === id);            
+            if (cartSearched) {                
+                return  cartSearched
+
+            }else {                
+                return 'Cart not found'                
+            }   
+        }
+        catch (error) {
+            return error
+        }
+    }    
+    
+    async createCart() {
+        try{
+            const carts = await this.getCarts()
+            let id
+            if(!carts.length){
+                id = 1;
+            }else{
+                id = carts [carts.length-1].id + 1;
+            }
+            const newCart = {id, products: [] };
+            Carts.push ({newCart});
+            await fs.promises.writeFile(this.path,JSON.stringify(Carts));
+        }catch(error){
+            return error
+        }
+    }
+
+   
+    
+    
+        
+
+
+}
+export const cartsManager = new CartManager();
