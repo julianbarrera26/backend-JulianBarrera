@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { manager } from './productmanager';
+import { manager } from '/ProductManager.js';
 
 class CartManager { 
     constructor(path) {
