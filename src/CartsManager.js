@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { manager } from '/ProductManager.js';
+import { manager } from './productmanager';
 
 class CartManager { 
     constructor(path) {
@@ -86,11 +86,20 @@ class CartManager {
         }
     }
 
-   
-    
-    
-        
-
-
 }
+const product1={title: 'iPhone',
+description: 'Un teléfono iPhone',
+price: 2500,
+thumbmail: 'imagen',
+code: 'code-01',
+stock: 10,};
+
+async function test ( ) {
+    const cartsManager = new CartManager ("carts.json");
+    await cartsManager.createCart(product1);
+}
+
+test();
+
+
 export const cartsManager = new CartManager();
