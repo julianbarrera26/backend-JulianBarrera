@@ -4,6 +4,12 @@ import { cartsManager } from "../CartsManager.js";
 const router = Router();
     
  router.post ('/', async (req,res)=>{
+    try{
+    const newCart = cartsManager.createCart();
+    res.status(201).json({message:'Carrito creado', cart: newCart});
+    }catch(error){
+        res.status(500).json({message:error.message});
+    }
 
  });
 
@@ -12,9 +18,9 @@ const router = Router();
     try {
         const cart = await cartsManager.getCartById(+cartId);
         if (!cart) {
-          return res.status(404).json({ message: "Product not found" });
+          return res.status(404).json({ message: "carrito not found" });
         }
-        res.status(200).json({ message: "User found", cart });
+        res.status(200).json({ message: "carrito found", cart });
       } catch (error) {
         res.status(500).json({ message: error.message });
       }
@@ -22,12 +28,10 @@ const router = Router();
  });
 
  router.post ('/:idCart/product/idProduct', async (req,res)=>{
-    const { title, descripcion, precio, id } = req.body;
-    if (!title || !descripcion || !precio || !id) {
-      return res.status(400).json({ message: "Some data is missing" });
-    }
+    const { cartId, producIid } = req.params;
+    const { quantify } = req.body;
     try {
-      const response = await cartsManager.addProductToCart(req.body);
+      await cartsManager.addProductToCart(+cartId,+producIid,quantify);
       res.status(200).json({ message: "Product Agregado", product: response });
     } catch (error) {
       res.status(500).json({ message: error.message });
