@@ -14,9 +14,9 @@ const router = Router();
  });
 
  router.get('/:idCart', async(req,res)=>{
-    const cartId = req.params.cartId;
+    const cid = req.params.cid;
     try {
-        const cart = await cartsManager.getCartById(+cartId);
+        const cart = await cartsManager.getCartById(+cid);
         if (!cart) {
           return res.status(404).json({ message: "carrito not found" });
         }
@@ -28,10 +28,10 @@ const router = Router();
  });
 
  router.post ('/:idCart/product/idProduct', async (req,res)=>{
-    const { cartId, producIid } = req.params;
+    const { cid, pid } = req.params;
     const { quantify } = req.body;
     try {
-      await cartsManager.addProductToCart(+cartId,+producIid,quantify);
+      await cartsManager.addProductToCart(+cid,+pid,quantify);
       res.status(200).json({ message: "Product Agregado", product: response });
     } catch (error) {
       res.status(500).json({ message: error.message });

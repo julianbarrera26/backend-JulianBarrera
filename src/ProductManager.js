@@ -178,13 +178,13 @@ class ProductManager {
 
 
 
- async function test() {
+ //async function test() {
 
-        const manager = new ProductManager("products.json");
+   //     const manager = new ProductManager("products.json");
         //await manager.createProduct(product1);
-        await manager.createProduct(product2);
+    //    await manager.createProduct(product2);
 
- }
+// }
     //    await productManager.createProduct({
     //        title: 'iPhone',
      //       description: 'Un teléfono iPhone',
@@ -206,7 +206,7 @@ class ProductManager {
        // console.log(await productManager.getProductById(1));
        // }
         
-       test();
+ //      test();
         
         
         

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { manager } from './ProductManager.js';
+import { pid } from 'process';
 
 class CartManager { 
     constructor(path) {
@@ -31,17 +32,17 @@ class CartManager {
      //   return this.Cart.find(Cart => Cart.code === code )
     //}
     async addProductToCart (idCart,idProduct){
-        const cart = await this.getCartById (idCart)
+        const cart = await this.getCartById (idCart);
         if (!cart){
-            throw new Error ('there is no cart qith this id')
+            throw new Error ('there is no cart with this id');
         }
         const product = await manager.getProductById (idProduct) 
         if (!product) {
-            throw new Error ('there is no cart qith this id')
+            throw new Error ('there is no product with this id')
         }
-        const productIndex = cart.products.findIdex(p=>p.id === idProduct)
+        const productIndex = cart.products.findIndex((p)=>p.product === idProduct);
         if (productIndex === -1) {
-            const newProduct = {id:idProduct,quantify:1}
+            const newProduct = {product: idProduct,quantify:1}
             cart.products.push(newProduct);
         } else{
             cart.products[productIndex].quantify++;
@@ -79,8 +80,9 @@ class CartManager {
                 id = carts [carts.length-1].id + 1;
             }
             const newCart = {id, products: [] };
-            Carts.push ({newCart});
-            await fs.promises.writeFile(this.path,JSON.stringify(Carts));
+            carts.push ({newCart});
+            await fs.promises.writeFile(this.path,JSON.stringify(carts));
+            return "cart created";
         }catch(error){
             return error
         }
